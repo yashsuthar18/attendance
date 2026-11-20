@@ -1,8 +1,44 @@
-node_modules
-.next
-.env
-.env.local
-.env.*.local
-.vercel
+# Dependencies and generated build output
+/node_modules/
+/.next/
+/out/
+/build/
+/dist/
+/coverage/
+/.cache/
+/.turbo/
+*.tsbuildinfo
+
+# Local credentials; keep the documented template in Git
+.env*
+!.env.example
+/.npmrc
+*.pem
+*.key
+*.p12
+*.pfx
+
+# Deployment and local tool state
+/.vercel/
+/.netlify/
+/.supabase/
+/.aws/
+/.codex/
+
+# Logs, editor state and OS files
 *.log
+/.idea/
+/.vscode/
 .DS_Store
+Thumbs.db
+Desktop.ini
+*.swp
+*.swo
+
+# Local exports and browser/test artifacts
+/exports/
+/backups/
+/tmp/
+/temp/
+/test-results/
+/playwright-report/

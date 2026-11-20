@@ -1,5 +1,5 @@
 import {requireEvent,apiError} from '../../../../lib/owner';
-import {FIELD_NAMES,isAllowedMapping,mobileNumber,generateCode,hashAccess,qrToken,shortText} from '../../../../lib/security';
+import {FIELD_NAMES,isAllowedMapping,mobileNumber,participantCode,hashAccess,qrToken,shortText} from '../../../../lib/security';
 export const runtime='nodejs';export const dynamic='force-dynamic';
 export async function POST(req){try{
   const body=await req.json();
@@ -43,7 +43,7 @@ export async function POST(req){try{
     if(xErr)throw xErr;
     const existingSet=new Set((existing||[]).map(x=>x.mobile));
     const fresh=records.filter(x=>!existingSet.has(x.mobile));
-    const coded=fresh.map(x=>{const code=generateCode();return {...x,access_hash:hashAccess(code),qr_token:qrToken(),_code:code}});
+    const coded=fresh.map(x=>{const code=participantCode(x.mobile);return {...x,access_hash:hashAccess(code),qr_token:qrToken(),_code:code}});
     let inserted=[];
     if(coded.length){
       const payload=coded.map(({_code,...rest})=>rest);

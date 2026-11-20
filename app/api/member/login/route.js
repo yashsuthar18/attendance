@@ -3,11 +3,11 @@ import {hashIp,matchesAccess,mobileNumber,shortText} from '../../../../lib/secur
 import {setMemberSession} from '../../../../lib/member-auth';
 export const runtime='nodejs';export const dynamic='force-dynamic';
 export async function POST(req){
-  const fail=()=>Response.json({error:'Invalid mobile, access code or event'},{status:401,headers:{'Cache-Control':'no-store'}});
+  const fail=()=>Response.json({error:'Invalid mobile, password or event'},{status:401,headers:{'Cache-Control':'no-store'}});
   try{
     const {slug,mobile,accessCode}=await req.json();
     const number=mobileNumber(mobile);
-    if(!number||typeof accessCode!=='string'||accessCode.length>100||accessCode.length<8||typeof slug!=='string'||slug.length>100)return fail();
+    if(!number||typeof accessCode!=='string'||!/^\d{6}$/.test(accessCode)||typeof slug!=='string'||slug.length>100)return fail();
     const db=adminDb();
     const {data:event}=await db.from('events').select('id').eq('slug',slug).eq('is_published',true).maybeSingle();
     if(!event)return fail();

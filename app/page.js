@@ -1,1 +1,53 @@
-export default function Home(){return <><div className="card"><h1>Event Registration & QR Attendance</h1><p className="muted">Independent web app · Excel import · Member login · Digital QR card · Three meeting attendance · CSV export</p><div className="row"><a className="button" href="/organizer">Open Organizer</a><a className="button secondary" href="/my-card">Participant Card</a></div></div><div className="grid"><div className="card"><h3>1. Organizer</h3>Upload a sheet, map columns, create individual member access codes.</div><div className="card"><h3>2. Participant</h3>Login with mobile and one-time issued access code, confirm details, view QR card.</div><div className="card"><h3>3. Attendance</h3>Staff scans the same QR across three meetings; duplicates are blocked.</div></div><p className="muted">Participants use a separate link supplied by the organizer, e.g. /join/your-event-slug</p></>}
+import Icon from '../components/Icon';
+import styles from './home.module.css';
+
+export default function Home() {
+  return (
+    <div className={styles.home}>
+      <section className={`hero ${styles.intro}`} aria-labelledby="home-title">
+        <p className={styles.eyebrow}>EVENT QR MANAGER</p>
+        <h1 id="home-title">
+          તમારી ઇવેન્ટ.<br />
+          <span>બધું એક જ જગ્યાએ.</span>
+        </h1>
+        <p className={styles.description}>
+          ઇવેન્ટનું સંચાલન કરો અથવા તમારું QR કાર્ડ ખોલો.
+        </p>
+      </section>
+
+      <section className={`hero-actions ${styles.access}`} aria-label="Organizer and participant access">
+        <article className={`feature-card ${styles.accessCard} ${styles.organizer}`} aria-labelledby="organizer-title">
+          <div className={styles.role}>
+            <span className={styles.roleIcon}><Icon name="organizer" /></span>
+            <span>આયોજક માટે</span>
+          </div>
+          <h2 id="organizer-title">Organizer Dashboard</h2>
+          <p>તમારા ઇવેન્ટ, સભ્યો અને મીટિંગની હાજરી એક જગ્યાએ સંભાળો.</p>
+          <div className={styles.cardAction}>
+            <a className="button btn-primary" href="/organizer">Dashboard ખોલો</a>
+          </div>
+        </article>
+
+        <article className={`feature-card ${styles.accessCard}`} aria-labelledby="participant-title">
+          <div className={styles.role}>
+            <span className={styles.roleIcon}><Icon name="card" /></span>
+            <span>સભ્ય માટે</span>
+          </div>
+          <h2 id="participant-title">Participant Card</h2>
+          <p>તમારું ડિજિટલ QR કાર્ડ જુઓ, ડાઉનલોડ કરો અથવા પ્રિન્ટ કાઢો.</p>
+          <div className={styles.cardAction}>
+            <a className="button btn-secondary" href="/my-card">મારું QR કાર્ડ ખોલો</a>
+          </div>
+        </article>
+      </section>
+
+      <aside className={`info ${styles.loginNote}`} aria-labelledby="participant-login-note">
+        <Icon name="lock" />
+        <div>
+          <h2 id="participant-login-note">પહેલી વખત login કરો છો?</h2>
+          <p>Login માટે આયોજકે મોકલેલી ઇવેન્ટ લિંકનો ઉપયોગ કરો.</p>
+        </div>
+      </aside>
+    </div>
+  );
+}
