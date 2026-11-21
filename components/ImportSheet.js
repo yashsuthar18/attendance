@@ -74,8 +74,8 @@ export default function ImportSheet({ event }) {
       const filename = file.name.toLowerCase();
       let sheet;
       if (filename.endsWith('.xlsx')) {
-        const read = (await import('read-excel-file/browser')).default;
-        sheet = await read(file);
+        const { readSheet } = await import('read-excel-file/browser');
+        sheet = await readSheet(file);
       } else if (filename.endsWith('.csv')) {
         const Papa = (await import('papaparse')).default;
         sheet = await new Promise((resolve, reject) =>

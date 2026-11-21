@@ -101,3 +101,20 @@ The app requires server API routes and cookies; deploy it as a Node.js app, not 
 | `examples/members-sample.csv` | Example import format |
 
 The application is independent of Gujarat Forms and does not send SMS, email or bulk messages.
+
+## Repeat the local end-to-end tests
+
+The optional `npm run test:e2e` suite requires Node.js 22+, a production build running on `http://localhost:3100`, and an isolated Chrome instance with remote debugging on `127.0.0.1:9227`. No additional npm libraries are required. It tests the real APIs against the configured Supabase project, creates a temporary QA organizer and a uniquely named QA event, and removes that account, its test login attempts, event and dependent records in cleanup. Existing organizer credentials are not used. Ordinary `npm test` never starts these database tests.
+
+1. Run `npm run build`, then `npm start -- --port 3100` in a separate terminal.
+2. Start a separate hidden Chrome profile in PowerShell:
+
+```powershell
+$qaProfile = Join-Path $env:TEMP ('attendance-e2e-' + [guid]::NewGuid().ToString('N'))
+Start-Process -FilePath 'C:/Program Files/Google/Chrome/Application/chrome.exe' -WindowStyle Hidden -ArgumentList @('--headless=new', '--disable-gpu', '--no-first-run', '--remote-debugging-address=127.0.0.1', '--remote-debugging-port=9227', ('--user-data-dir=' + $qaProfile), 'about:blank')
+```
+
+3. Run `npm run test:e2e`. The suite provisions its own temporary organizer with random credentials held only in memory. It uses the configured Supabase service key for this setup and cleanup; no existing organizer password is required. An optional `E2E_BASE_URL` may point at another localhost port; public hosts are rejected.
+4. Results, screenshots and downloaded test files are saved under ignored `test-results/<run-id>/`. Check `cleanupOK` in the JSON report. If the process is forcibly interrupted, `fixture.json` identifies the exact QA event and the `qa-organizer-*.json` manifest identifies its temporary organizer for cleanup; normal test failures still run cleanup.
+
+The suite covers login/session errors, CSV and XLSX upload, invalid/duplicate imports, password convention, pagination, profile confirmation, QR/print, meeting rules, duplicate attendance, exports, logout, and layouts at 320/390/768/1366px. It does not replace a physical phone-camera test or verification of a public production deployment. Stop the temporary server and isolated browser when finished.

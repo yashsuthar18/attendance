@@ -55,16 +55,20 @@ export default function Organizer() {
 
   useEffect(() => {
     if (!eventId || tab !== 'members') return;
+    let active = true;
     async function run() {
       try {
         const data = await organizerFetch(`/api/organizer/members?eventId=${encodeURIComponent(eventId)}&page=${page}`);
+        // A previous page request can finish after the user has moved on.
+        if (!active) return;
         setMembers(data.members);
         setMemberCount(data.count);
       } catch (e) {
-        setError(e.message);
+        if (active) setError(e.message);
       }
     }
     run();
+    return () => { active = false; };
   }, [eventId, tab, page]);
 
   async function addEvent(e) {
